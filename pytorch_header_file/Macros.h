@@ -24,10 +24,10 @@
 // file.
 
 #ifndef C10_USING_CUSTOM_GENERATED_MACROS
-#include <torch/headeronly/macros/cmake_macros.h>
+#include "cmake_macros.h"
 #endif // C10_USING_CUSTOM_GENERATED_MACROS
 
-#include <torch/headeronly/macros/Export.h>
+#include "Export.h"
 
 #if defined(__clang__)
 #define __ubsan_ignore_float_divide_by_zero__ \

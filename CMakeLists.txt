@@ -5,4 +5,19 @@ project (${PROJ_NAME})
 
 set(PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR})
 
+set(CMAKE_DEBUG_POSTFIX _debug)
+set(CMAKE_RELEASE_POSTFIX _release)
+
 add_executable(${PROJ_NAME} "${PROJECT_ROOT_DIR}/main.cpp")
+
+set_target_properties(
+  ${PROJ_NAME}
+  PROPERTIES
+  DEBUG_POSTFIX "${CMAKE_DEBUG_POSTFIX}"
+)
+
+set_target_properties(
+  ${PROJ_NAME}
+  PROPERTIES
+  RELEASE_POSTFIX "${CMAKE_RELEASE_POSTFIX}"
+)

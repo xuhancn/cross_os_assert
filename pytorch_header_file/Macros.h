@@ -435,13 +435,20 @@ __host__ __device__
 // wrappers around the STL assertion headers cassert and assert.h where we
 // redefine the assert macro to call __devicelib_assert_fail directly and 
 // bypass _wassert.
-#define SYCL_KERNEL_ASSERT(cond)                                                              \
-  ((cond) ? void(0)                                                               \
-       : __devicelib_assert_fail(                                              \
-             #cond, __FILE__, __LINE__, nullptr, __spirv_GlobalInvocationId_x(),  \
-             __spirv_GlobalInvocationId_y(), __spirv_GlobalInvocationId_z(),   \
-             __spirv_LocalInvocationId_x(), __spirv_LocalInvocationId_y(),     \
-             __spirv_LocalInvocationId_z()))
+#define SYCL_KERNEL_ASSERT(cond)        \
+  if (C10_UNLIKELY(!(cond))) {          \
+    (void)__devicelib_assert_fail(      \
+        #cond,                          \
+        __FILE__,                       \
+        __LINE__,                       \
+        nullptr,                        \
+        __spirv_GlobalInvocationId_x(), \
+        __spirv_GlobalInvocationId_y(), \
+        __spirv_GlobalInvocationId_z(), \
+        __spirv_LocalInvocationId_x(),  \
+        __spirv_LocalInvocationId_y(),  \
+        __spirv_LocalInvocationId_z()); \
+  }
 #else // else __SYCL_DEVICE_ONLY__
 #define SYCL_KERNEL_ASSERT(cond)                 \
   if (C10_UNLIKELY(!(cond))) {                   \

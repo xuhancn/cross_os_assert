@@ -10,6 +10,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_DEBUG_POSTFIX _debug)
 set(CMAKE_RELEASE_POSTFIX _release)
 
+add_definitions(-D__SYCL_DEVICE_ONLY__)
+
 add_executable(${PROJ_NAME} "${PROJECT_ROOT_DIR}/main.cpp")
 
 set_target_properties(

@@ -546,11 +546,28 @@ __host__ __device__
     __assert_fail(                                                       \
         #cond, __FILE__, static_cast<unsigned int>(__LINE__), __func__); \
   }
+#ifdef __SYCL_DEVICE_ONLY__
+#define SYCL_KERNEL_ASSERT(cond)        \
+  if (C10_UNLIKELY(!(cond))) {          \
+    (void)__devicelib_assert_fail(      \
+        #cond,                          \
+        __FILE__,                       \
+        __LINE__,                       \
+        nullptr,                        \
+        __spirv_GlobalInvocationId_x(), \
+        __spirv_GlobalInvocationId_y(), \
+        __spirv_GlobalInvocationId_z(), \
+        __spirv_LocalInvocationId_x(),  \
+        __spirv_LocalInvocationId_y(),  \
+        __spirv_LocalInvocationId_z()); \
+  }
+#else // else __SYCL_DEVICE_ONLY__
 #define SYCL_KERNEL_ASSERT(cond)                                         \
   if (C10_UNLIKELY(!(cond))) {                                           \
     __assert_fail(                                                       \
         #cond, __FILE__, static_cast<unsigned int>(__LINE__), __func__); \
   }
+#endif // endif __SYCL_DEVICE_ONLY__
 #endif //  C10_USE_ROCM_KERNEL_ASSERT && USE_ROCM
 #endif // __APPLE__
 
